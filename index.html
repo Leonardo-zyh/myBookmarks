@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>mybookmarks</title>
+    <link rel="stylesheet" href="./css.css">
+    
+</head>
+<body>
+    <header></header>
+    <main>
+
+        <div id="mainx"></div>
+
+    </main>
+    <footer></footer>
+
+    <script>
+    
+//1.初始化数据
+    var hashA = init()
+    var keys = hashA.keys
+    var hash = hashA.hash
+
+//2.生成键盘
+    //while：初始声明，判断表达式，声明变量+1
+    //fro(初始声明;判断表达式;声明变量+1){}
+    generateKeyboard(keys ,hash)
+
+//3.监听用户动作
+     listenToUser(hash)
+    
+    
+//工具：封装函数，函数快捷键简化代码
+    //1.
+    function init(){
+        var keys = {
+            0:['q','w','e','r','t','y','u','i','o','p'], //0为index，q w e r t为indexx2
+            1:['a','s','d','f','g','h','j','k','l'],
+            2:['z','x','c','v','b','n','m'],
+            length: 3
+    }
+    var hash = {
+        q: 'qq.com',
+        w: 'weibo.com',
+        z: 'zhihu.com',
+        m: 'mcdonalds.com',
+    }
+    //取出localstorage中zzz对应的hash
+    var hashInLocalStorage = getFromLocalStorage('zzz')
+        //JSON.parse(localStorage.getItem('zzz') || 'null')
+        if(hashInLocalStorage){
+            hash = hashInLocalStorage
+        }//如果不是空的就覆盖hash
+
+    return{
+        'keys' : keys, 
+        'hash' : hash
+    }
+
+    }
+
+    //2.  
+    function generateKeyboard(keys,hash){
+        for(var index=0; index < keys['length']; index = index + 1){
+        var divx = tag('div', {className:'row'})      //tag('div')// tag（）生成，
+                                // divx.className = 'row'
+        mainx.appendChild(divx)//.appendChild（）配置
+        
+        
+        var row = keys [index]   //数组中数组的 0~9 0~8 0~6
+        for(var index2=0; index2 < row['length']; index2 = index2 + 1){//for初始声明;判断表达式;声明变量+1){}
+                                                     //.textContent编辑内容文字，q w e r t
+            var spanx = createSpan(row[index2] )       //遍历keys，生产kbd标签//kbdx.className = 'key'
+            var buttonx = createButton(row[index2])    //index2=0:console.log(row) 打印 第一数组，第二数组，第三数组
+            var imgx = createImage(hash[row[index2]])  //var spanx = createSpan(row[index2])
+                                                      
+        var kbdx = tag('kbd',{className:'key'})
+        kbdx.appendChild(spanx)
+        kbdx.appendChild(imgx)
+        kbdx.appendChild(buttonx)
+        divx.appendChild(kbdx)
+        }
+    }
+        
+    }
+    //3.
+    function listenToUser(hash){
+        document.onkeypress =function(jianting){//.onkeypress =function()键盘被点击
+        var key = jianting['key']//.key
+        var  website = hash[key]
+        //location.href = 'http://' + website
+        window.open('http://'+website, '_blank') } 
+
+    }
+
+
+
+    function getFromLocalStorage(name){
+        return JSON.parse(localStorage.getItem(name) || 'null')
+        }
+        //function tag(tagName){
+        //    return document.createElement(tagName)}//tagName代表标签
+
+        function tag(tagName , attributes){//tagName代表标签,attrinutes代表便利属性
+            var element = document.createElement(tagName)
+            for(var key in attributes){
+                element[key] = attributes[key]
+            }
+            return element
+        }
+
+        function createSpan(textContent){
+        var spanx = tag('span')    
+            spanx.textContent = textContent  //.textContent编辑内容文字，q w e r t
+            spanx.className = 'text'
+            return spanx
+            }
+        function createButton(id){
+            var buttonx = tag('button')
+            buttonx.textContent = 'E';
+            buttonx.id=id     //本地的一个id，q w e r t
+            buttonx.onclick = function(dianji){   //.onclick = function()被点击显示
+            var buttonxx = dianji.target //[target]是用户点击的元素，
+            var imgxx = buttonxx.previousSibling
+            var key=buttonxx.id    
+            var x=prompt('给我一个网站')    //向用户要一个网址，qq.com存到x
+            hash[key]=x //hash变更
+
+            imgxx.src = 'http://' + x + '/favicon.ico'
+            imgxx.onerror = function(xxx){
+            xxx.target.src = '//i.loli.net/2017/11/10/5a05afbc5e183.png'
+            }
+            localStorage.setItem('zzz' ,JSON.stringify(hash))//存网址备份zzz中，JSON把hash字符串
+            console.log(hash)
+            }
+            return buttonx
+        }
+        function createImage(domain){
+            var imgx = tag('img')
+            if(domain){
+                imgx.src = 'http://' + domain + '/favicon.ico'
+            }
+            else{
+                imgx.src = '//i.loli.net/2017/11/10/5a05afbc5e183.png'
+            }
+            imgx.onerror = function(xxx){
+                xxx.target.src = '//i.loli.net/2017/11/10/5a05afbc5e183.png'
+            }
+            return imgx
+        }
+    
+    
+    //while：初始声明，判断表达式，声明变量+1
+    //for初始声明;判断表达式;声明变量+1){}
+    </script> 
+</body>
+</html>

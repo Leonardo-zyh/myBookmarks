@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>myBookmarks</title>
+    <link rel="stylesheet" href="css.css">
+</head>
+<body>
+    <header></header>
+    <main >
+        <div id="mainx"></div>
+    </main>
+    <footer></footer>
+</body>
+<script>
+    keys = {
+        0:['q','w','e','r','t','y','u','i','o','p'],
+        1:['a','s','d','f','g','h','j','k','l'],
+        2:['z','x','c','v','b','n','m'],
+        length:3
+    }
+    hash ={
+        q:'qq.com',
+        w:'weibo.com',
+        r:'renren.com',
+        t:'tengxun.com',
+        z:'zhihu.com',
+        m:'maya.com'
+        
+    }
+    hashInLocalStorage =  JSON.parse(localStorage.getItem('zzz') || 'null')
+    
+    if(hashInLocalStorage){
+        hash = hashInLocalStorage
+
+    }
+
+    index=0
+    while(index<keys.length){
+        divx = document.createElement('div')
+        mainx.appendChild(divx)
+
+        row = keys[index]
+        index2 = 0
+        while(index2<row.length){
+            kbdx = document.createElement('kbd')
+        kbdx.textContent = row[index2]
+        
+        
+        buttonx = document.createElement('button')
+        buttonx.textContent = '编辑'
+
+        buttonx.id = row[index2] //bug,先建buttonx
+        buttonx.onclick=function(dianji){
+            key = dianji.target.id
+            z = prompt('给我一个网址')//文字要加字符串
+            hash[key] = z
+
+            localStorage.setItem('zzz',JSON.stringify(hash))//存备份
+    
+        }
+        divx.appendChild(kbdx)
+        kbdx.appendChild(buttonx)
+
+        index2 = index2+1
+        
+        }
+        
+        index = index+1
+    }
+
+    document.onkeypress=function(jianting){
+
+        key = jianting.key
+        website = hash[key]
+        window.open('http://'+website, '_blank')
+    }
+
+
+
+</script>
+</body>
+</html>

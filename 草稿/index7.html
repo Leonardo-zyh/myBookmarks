@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>mybookmarks</title>
+    <link rel="stylesheet" href="./css.css">
+    
+</head>
+<body>
+    <header></header>
+    <main>
+
+        <div id="mainx"></div>
+
+    </main>
+    <footer></footer>
+
+    <script>
+    //1.初始化数据
+    var keys = {
+        0:['q','w','e','r','t','y','u','i','o','p'], //0为index，q w e r t为indexx2
+        1:['a','s','d','f','g','h','j','k','l'],
+        2:['z','x','c','v','b','n','m'],
+        length: 3
+    }
+    var hash = {
+        q: 'qq.com',
+        w: 'weibo.com',
+        z: 'zhihu.com',
+        m: 'mcdonalds.com',
+    }
+      
+    //取出localstorage中zzz对应的hash
+    var hashInLocalStorage = getFromLocalStorage('zzz')
+    //JSON.parse(localStorage.getItem('zzz') || 'null')
+    if(hashInLocalStorage){
+        hash = hashInLocalStorage
+    }//如果不是空的就覆盖hash
+
+    
+
+    
+
+    //2.生成键盘
+    //while：初始声明，判断表达式，声明变量+1
+    //fro(初始声明;判断表达式;声明变量+1){}
+    for(var index=0; index < keys['length']; index = index + 1){
+        var divx = tag('div', {className:'row'})      //tag('div')// tag（）声明，
+                                // divx.className = 'row'
+        mainx.appendChild(divx)//.appendChild（）配置
+        
+        
+        var row = keys [index]   //数组中数组，row表示行
+        for(var index2=0; index2 < row['length']; index2 = index2 + 1){
+        //index2=0:console.log(row) 打印 第一数组，第二数组，第三数组
+        //数组中数组的 0~9 0~8 0~6
+            var spanx = tag('span')    
+            spanx.textContent = row[index2]  //.textContent编辑内容文字，q w e r t
+            spanx.className = 'text'
+            
+                //遍历keys，生产kbd标签
+                                                        //kbdx.className = 'key'
+            var buttonx = tag('button')
+            buttonx.textContent = '编辑';
+            buttonx.id=row[index2]     //本地的一个id，q w e r t
+            buttonx.onclick = function(dianji){   //.onclick = function()被点击显示
+            var buttonxx = dianji.targer //[target]是用户点击的元素，
+            var imgxx = buttonxx.previousSibling  //buttonx的上位同胞元素是imgx
+            var key=buttonxx.id    
+            var x=prompt('给我一个网站')    //提示框，返回用户输入的网址，qq.com存到x
+            hash[key]=x                   //hash变更
+
+            imgxx.src = 'http://' + x + '/favicon.ico'
+            imgxx.onerror = function(xxx){         //捕获错误信息
+            xxx.target.src = '//i.loli.net/2017/11/10/5a05afbc5e183.png'
+            }
+            localStorage.setItem('zzz' ,JSON.stringify(hash))//存网址备份zzz中，JSON把hash字符串
+            //console.log(hash)
+            }
+            
+            //刷新后...
+            var imgx = tag('img')
+            if(hash[row[index2]]){//网址存在
+                imgx.src = 'http://' + hash[row[index2]] + '/favicon.ico'
+            }
+            else{
+                imgx.src = '//i.loli.net/2017/11/10/5a05afbc5e183.png'
+            }
+            imgx.onerror = function(xxx){
+                xxx.target.src = '//i.loli.net/2017/11/10/5a05afbc5e183.png'
+            }
+        
+            
+            
+        var kbdx = tag('kbd',{className:'key'})
+        kbdx.appendChild(spanx)
+        kbdx.appendChild(imgx)
+        kbdx.appendChild(buttonx)
+        divx.appendChild(kbdx)
+        }
+
+    }
+    
+    
+    //3.监听键盘
+     document.onkeypress =function(jianting){//.onkeypress =function()键盘被点击
+        var key = jianting['key']//.key
+        var  website = hash[key]
+        //location.href = 'http://' + website
+        window.open('http://'+website, '_blank') } 
+    
+    
+    //工具：封装函数，函数快捷键简化代码
+        function getFromLocalStorage(name){
+        return JSON.parse(localStorage.getItem(name) || 'null')
+    }
+        //function tag(tagName){
+        //    return document.createElement(tagName)}//tagName代表标签
+
+        function tag(tagName , attributes){//tagName代表标签,attrinutes代表便利属性
+            var element = document.createElement(tagName)
+            for(var key in attributes){
+                element[key] = attributes[key]
+            }
+            return element
+        }
+    //while：初始声明，判断表达式，声明变量+1
+    //fro(初始声明;判断表达式;声明变量+1){}
+    </script> 
+</body>
+</html>
